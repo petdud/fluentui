@@ -5,13 +5,13 @@ import {
   useUnhandledProps,
   useAccessibility,
   useFluentContext,
-  useStyles,
   useTelemetry,
 } from '@fluentui/react-bindings';
+import { makeStyles } from '@fluentui/react-theme-provider';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
-import { createShorthandFactory, UIComponentProps, commonPropTypes } from '../../utils';
+import { createShorthandFactory, UIComponentProps, commonPropTypes, pxToRem } from '../../utils';
 import { FluentComponentStaticProps } from '../../types';
 
 export interface ImageProps extends UIComponentProps, ImageBehaviorProps {
@@ -39,6 +39,23 @@ export interface ImageProps extends UIComponentProps, ImageBehaviorProps {
 export type ImageStylesProps = Pick<ImageProps, 'avatar' | 'circular' | 'fluid'>;
 export const imageClassName = 'ui-image';
 
+const useImageStyles = makeStyles([
+  [
+    null,
+    {
+      boxSizing: 'border-box',
+      display: 'inline-block',
+      height: 'auto',
+      verticalAlign: 'middle',
+    },
+  ],
+
+  [{ avatar: true }, { borderRadius: pxToRem(9999), width: pxToRem(32) }],
+  [{ circular: true }, { borderRadius: pxToRem(9999) }],
+
+  [{ fluid: true }, { width: '100%' }],
+]);
+
 /**
  * An Image is a graphic representation of something.
  *
@@ -55,18 +72,7 @@ export const Image: ComponentWithAs<'img', ImageProps> & FluentComponentStaticPr
   const { setStart, setEnd } = useTelemetry(Image.displayName, context.telemetry);
   setStart();
 
-  const {
-    accessibility,
-    alt,
-    'aria-label': ariaLabel,
-    avatar,
-    circular,
-    className,
-    design,
-    fluid,
-    styles,
-    variables,
-  } = props;
+  const { accessibility, alt, 'aria-label': ariaLabel, avatar, circular, className, fluid } = props;
 
   const getA11Props = useAccessibility(accessibility, {
     debugName: Image.displayName,
@@ -76,26 +82,12 @@ export const Image: ComponentWithAs<'img', ImageProps> & FluentComponentStaticPr
     }),
     rtl: context.rtl,
   });
-  const { classes } = useStyles<ImageStylesProps>(Image.displayName, {
-    className: imageClassName,
-    mapPropsToStyles: () => ({
-      avatar,
-      circular,
-      fluid,
-    }),
-    mapPropsToInlineStyles: () => ({
-      className,
-      design,
-      styles,
-      variables,
-    }),
-    rtl: context.rtl,
-  });
+  const rootClassName = useImageStyles({ avatar, circular, fluid }, imageClassName, className);
 
   const ElementType = getElementType(props);
   const unhandledProps = useUnhandledProps(Image.handledProps, props);
 
-  const result = <ElementType {...getA11Props('root', { className: classes.root, ...unhandledProps })} />;
+  const result = <ElementType {...getA11Props('root', { className: rootClassName, ...unhandledProps })} />;
 
   setEnd();
 

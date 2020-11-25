@@ -27,6 +27,7 @@ import {
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 
+import { flatten } from './flat';
 import { ChildrenComponentProps, setUpWhatInput, tryCleanupWhatInput, UIComponentProps } from '../../utils';
 
 import { mergeProviderContexts } from '../../utils/mergeProviderContexts';
@@ -89,6 +90,14 @@ const renderStaticStyles = (renderer: Renderer, theme: ThemeInput, siteVariables
 };
 
 export const providerClassName = 'ui-provider';
+
+function variablesToTokens(siteVariables: SiteVariablesPrepared) {
+  const flatVariables = flatten(siteVariables);
+
+  return _.mapKeys(flatVariables, (value, key) => {
+    return '--theme-' + key.replace(/\./g, '-');
+  });
+}
 
 /**
  * The Provider passes the CSS-in-JS renderer, theme styles and other settings to Fluent UI components.
@@ -207,7 +216,9 @@ export const Provider: ComponentWithAs<'div', ProviderProps> & {
     <RenderProvider>
       <Unstable_FluentContextProvider value={outgoingContext}>
         <PortalBoxContext.Provider value={element}>
-          <ElementType {...elementProps}>{children}</ElementType>
+          <div className="provider-variables" style={variablesToTokens(outgoingContext.theme.siteVariables)}>
+            <ElementType {...elementProps}>{children}</ElementType>
+          </div>
         </PortalBoxContext.Provider>
       </Unstable_FluentContextProvider>
     </RenderProvider>

@@ -458,11 +458,6 @@ const Sidebar: React.FC<RouteComponentProps & SidebarProps> = props => {
     zIndex: 1000,
   };
 
-  const logoStyles: ICSSInJSStyle = {
-    marginRight: '0.5rem',
-    width: '36px',
-  };
-
   const gradientTextStyles: React.CSSProperties = {
     background: 'linear-gradient(45deg, rgb(138, 255, 124), rgb(123, 226, 251))',
     color: 'transparent',
@@ -474,7 +469,7 @@ const Sidebar: React.FC<RouteComponentProps & SidebarProps> = props => {
   return (
     <Segment styles={sidebarStyles}>
       <Flex column hAlign="center" styles={{ padding: '1rem', background: 'black' }}>
-        <Logo flavor="white" styles={logoStyles} />
+        <Logo flavor="white" style={{ marginRight: '0.5rem', width: '36px' }} />
         <Text
           role="heading"
           aria-level={1}
@@ -521,7 +516,7 @@ const Sidebar: React.FC<RouteComponentProps & SidebarProps> = props => {
               src="https://fabricweb.azureedge.net/fabric-website/assets/images/github.png"
               width="20px"
               height="20px"
-              styles={{ float: 'right' }}
+              style={{ float: 'right' }}
             />
           </Box>
         </a>
