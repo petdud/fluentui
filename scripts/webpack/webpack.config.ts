@@ -12,6 +12,24 @@ import config from '../config';
 const { paths } = config;
 const { __DEV__, __PERF__, __PROD__ } = config.compiler_globals;
 
+class IgnoreNotFoundExportPlugin {
+  apply(compiler) {
+    const messageRegExp = /export '.*'( \(reexported as '.*'\))? was not found in/;
+
+    const doneHook = stats => {
+      stats.compilation.warnings = stats.compilation.warnings.filter(
+        warn => !(warn && messageRegExp.test(warn.message)),
+      );
+    };
+
+    if (compiler.hooks) {
+      compiler.hooks.done.tap('IgnoreNotFoundExportPlugin', doneHook);
+    } else {
+      compiler.plugin('done', doneHook);
+    }
+  }
+}
+
 const webpackConfig: webpack.Configuration = {
   name: 'client',
   target: 'web',
@@ -71,6 +89,7 @@ const webpackConfig: webpack.Configuration = {
     //   tsconfig: paths.docs('tsconfig.json'),
     //   watch: [paths.docsSrc(), paths.packages()],
     // }),
+    new IgnoreNotFoundExportPlugin(),
     new webpack.DefinePlugin(config.compiler_globals),
     new webpack.ContextReplacementPlugin(/node_modules[\\|/]typescript[\\|/]lib/, /typescript\.js/, false),
     new (CopyWebpackPlugin as any)([
