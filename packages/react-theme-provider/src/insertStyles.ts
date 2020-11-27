@@ -1,9 +1,9 @@
-const styleNode = document.createElement('style');
+const styleNode = typeof document === 'object' ? document.createElement('style') : null;
 
-styleNode.setAttribute('fcss', 'rule');
-document.head.appendChild(styleNode);
-
-const styleSheet = styleNode.sheet as CSSStyleSheet;
+if (styleNode) {
+  styleNode.setAttribute('fcss', 'rule');
+  document.head.appendChild(styleNode);
+}
 
 let index = 0;
 
@@ -33,7 +33,10 @@ export function insertStyles(
     // console.log('insertStyles:definitions', definitions[propertyName][1]);
 
     cache[ruleClassName] = [propName, definition];
-    styleSheet.insertRule(ruleCSS, index); // TODO: index can't be global, should be per node
+
+    if (styleNode) {
+      (styleNode.sheet as CSSStyleSheet).insertRule(ruleCSS, index); // TODO: index can't be global, should be per node
+    }
 
     index++;
   }
