@@ -1,8 +1,10 @@
 import hashString from '@emotion/hash';
+// @ts-ignore
 import { useFluentContext } from '@fluentui/react-bindings';
 import * as CSS from 'csstype';
 // @ts-ignore
 import { expand } from 'inline-style-expand-shorthand';
+// @ts-ignore
 import Stylis from 'stylis';
 import { convertProperty } from 'rtl-css-js/core';
 
@@ -48,9 +50,10 @@ function normalizeNestedProperty(nestedProperty: string): string {
   return nestedProperty;
 }
 
-function createTokensProxy(tokens) {
+function createTokensProxy(tokens: any) {
   const g = {
-    get(target, key) {
+    // @ts-ignore
+    get(target: any, key: any) {
       if (isObject(target[key])) {
         return new Proxy({ ...target[key], value: (target.value ?? '') + '-' + key }, g);
       }

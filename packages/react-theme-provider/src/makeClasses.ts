@@ -1,6 +1,7 @@
 import { IStyle } from '@fluentui/merge-styles';
 import { Theme } from '@fluentui/theme';
 import { applyClasses } from './applyClasses';
+// @ts-ignore
 import { makeStyles, UseStylesOptions } from './makeStyles';
 
 /**
@@ -41,6 +42,7 @@ export const makeClasses = <TState extends {}>(
   return (state: TState, options?: UseStylesOptions) => {
     const classes = useStyles(options);
 
+    // @ts-ignore
     applyClasses(state, classes);
   };
 };
