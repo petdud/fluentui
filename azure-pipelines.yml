@@ -139,6 +139,9 @@ jobs:
       - script: npx midgard-yarn install
         displayName: yarn
 
+      - script: yarn buildto @fluentui/react-theme-provider
+        displayName: build deps
+
       - script: yarn workspace @fluentui/docs vr:build
         displayName: build FUI N* VR Test
 
