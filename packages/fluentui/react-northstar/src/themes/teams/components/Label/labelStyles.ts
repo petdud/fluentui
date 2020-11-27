@@ -27,7 +27,7 @@ export const labelStyles: ComponentSlotStylesPrepared<LabelStylesProps, LabelVar
     };
   },
 
-  content: ({ props: p, variables: v }): ICSSInJSStyle => {
+  /*  content: ({ props: p, variables: v }): ICSSInJSStyle => {
     const hasStartElement = (p.hasImage && p.imagePosition === 'start') || (p.hasIcon && p.iconPosition === 'start');
     const hasEndElement = (p.hasImage && p.imagePosition === 'end') || (p.hasIcon && p.iconPosition === 'end');
 
@@ -39,30 +39,30 @@ export const labelStyles: ComponentSlotStylesPrepared<LabelStylesProps, LabelVar
         marginRight: pxToRem(3),
       }),
     };
-  },
+  },*/
 
-  image: ({ variables: v }): ICSSInJSStyle => ({
-    height: v.height,
-    width: v.height,
-  }),
+  // image: ({ variables: v }): ICSSInJSStyle => ({
+  //   height: v.height,
+  //   width: v.height,
+  // }),
 
-  icon: ({ props: p, variables: v }): ICSSInJSStyle => ({
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: v.iconSize,
-    height: v.iconSize,
-
-    '& > :first-child': {
-      height: '100%',
-      width: '100%',
-      '& svg': {
-        height: '100%',
-        width: '100%',
-      },
-    },
-    ...(p.hasActionableIcon && {
-      cursor: 'pointer',
-    }),
-  }),
+  // icon: ({ props: p, variables: v }): ICSSInJSStyle => ({
+  //   display: 'inline-flex',
+  //   alignItems: 'center',
+  //   justifyContent: 'center',
+  //   width: v.iconSize,
+  //   height: v.iconSize,
+  //
+  //   '& > :first-child': {
+  //     height: '100%',
+  //     width: '100%',
+  //     '& svg': {
+  //       height: '100%',
+  //       width: '100%',
+  //     },
+  //   },
+  //   ...(p.hasActionableIcon && {
+  //     cursor: 'pointer',
+  //   }),
+  // }),
 };

@@ -132,8 +132,13 @@ function matchesSelectors(matcher: any, selectors: any): boolean {
   if (isObject(matcher)) {
     Object.keys(matcher).forEach(matcherName => {
       const matcherValue = matcher[matcherName];
+      const matchesSelector =
+        matcherValue == selectors[matcherName] ||
+        // https://stackoverflow.com/a/19277873/6488546
+        // find less tricky way
+        (matcherValue === false && selectors[matcherName] == null);
 
-      if (matcherValue != selectors[matcherName]) {
+      if (!matchesSelector) {
         matches = false;
       }
     });

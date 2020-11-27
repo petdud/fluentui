@@ -10,6 +10,7 @@ import {
   useUnhandledProps,
   ShorthandConfig,
 } from '@fluentui/react-bindings';
+import { makeStyles } from '@fluentui/react-theme-provider';
 import * as customPropTypes from '@fluentui/react-proptypes';
 import * as _ from 'lodash';
 import * as PropTypes from 'prop-types';
@@ -25,12 +26,14 @@ import {
   SizeValue,
   ShorthandFactory,
   createShorthand,
+  pxToRem,
 } from '../../utils';
 import { Box, BoxProps } from '../Box/Box';
 import { Loader, LoaderProps } from '../Loader/Loader';
 import { ComponentEventHandler, ShorthandValue } from '../../types';
 import { ButtonGroup } from './ButtonGroup';
 import { ButtonContent, ButtonContentProps } from './ButtonContent';
+import { faster, ultraFast } from '../../themes/teams/animations/durations';
 
 export interface ButtonProps
   extends UIComponentProps,
@@ -100,6 +103,171 @@ export type ButtonStylesProps = Pick<
   hasContent?: boolean;
 };
 
+const useButtonStyles = makeStyles([
+  [
+    null,
+    tokens => ({
+      alignItems: 'center',
+      display: 'inline-flex',
+      justifyContent: 'center',
+      position: 'relative',
+      verticalAlign: 'middle',
+
+      cursor: 'pointer',
+      transition: faster,
+
+      padding: `0 ${pxToRem(20)}`,
+      height: pxToRem(32),
+      minWidth: pxToRem(96),
+      maxWidth: pxToRem(280),
+
+      backgroundColor: tokens.colorScheme.default.background,
+      borderRadius: tokens.borderRadius,
+      color: tokens.colorScheme.default.foreground,
+    }),
+  ],
+
+  [{ loading: true }, { minWidth: pxToRem(118) }],
+
+  [
+    { size: 'small' },
+    {
+      padding: `0 ${pxToRem(8)}`,
+      height: pxToRem(24),
+      minWidth: pxToRem(72),
+    },
+  ],
+
+  [
+    { text: false },
+    tokens => ({
+      outline: 0,
+      borderWidth: tokens.borderWidth,
+      borderStyle: 'solid',
+      borderColor: tokens.colorScheme.default.border,
+      boxShadow: tokens.shadowLevel1,
+
+      ':hover': {
+        backgroundColor: tokens.colorScheme.default.backgroundHover1,
+        borderColor: tokens.colorScheme.default.borderHover,
+        color: tokens.colorScheme.default.foregroundHover,
+      },
+
+      ':active': {
+        backgroundColor: tokens.colorScheme.default.backgroundPressed,
+        borderColor: tokens.colorScheme.default.borderPressed,
+        boxShadow: 'none',
+        color: tokens.colorScheme.default.foregroundPressed,
+        transition: ultraFast,
+      },
+
+      // ':focus': borderFocusStyles[':focus'],
+      ':focus-visible': {
+        // ...borderFocusStyles[':focus-visible'],
+
+        // backgroundColor: v.backgroundColorFocus,
+        // borderColor: v.borderColorFocus,
+        borderWidth: tokens.borderWidth,
+        // color: v.colorFocus,
+
+        ':hover': {
+          borderColor: tokens.colorScheme.default.borderHover,
+        },
+      },
+    }),
+  ],
+  [
+    { text: false, size: 'small' },
+    {
+      boxShadow: 'none',
+    },
+  ],
+
+  [
+    { primary: true, text: false },
+    tokens => ({
+      backgroundColor: tokens.colorScheme.brand.background,
+      borderColor: 'transparent',
+      boxShadow: tokens.shadowLevel1Dark,
+      color: tokens.colorScheme.brand.foreground4,
+
+      ':active': {
+        backgroundColor: tokens.colorScheme.brand.backgroundPressed,
+        boxShadow: 'none',
+        transition: ultraFast,
+      },
+
+      // ':focus': borderFocusStyles[':focus'],
+      ':focus-visible': {
+        // ...borderFocusStyles[':focus-visible'],
+        // backgroundColor: v.primaryBackgroundColorFocus,
+      },
+
+      ':hover': {
+        backgroundColor: tokens.colorScheme.brand.backgroundHover,
+        color: tokens.colorScheme.brand.foreground4,
+      },
+    }),
+  ],
+
+  [
+    { disabled: true },
+    tokens => ({
+      cursor: 'default',
+      pointerEvents: 'none',
+
+      boxShadow: 'none',
+
+      backgroundColor: tokens.colorScheme.default.backgroundDisabled,
+      borderColor: 'transparent',
+      color: tokens.colorScheme.brand.foregroundDisabled,
+
+      ':hover': {
+        color: tokens.colorScheme.brand.foregroundDisabled,
+      },
+    }),
+  ],
+  [
+    { disabled: true, text: true },
+    tokens => ({
+      color: tokens.colorScheme.brand.foregroundDisabled1,
+      backgroundColor: 'transparent',
+
+      ':hover': {
+        color: tokens.colorScheme.brand.foregroundDisabled1,
+      },
+    }),
+  ],
+
+  [{ fluid: true }, { width: '100%', maxWidth: '100%' }],
+]);
+const useButtonContentStyles = makeStyles([
+  [
+    null,
+    {
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    },
+  ],
+  [
+    null,
+    tokens => ({
+      fontSize: tokens.fontSizes.medium,
+      fontWeight: tokens.fontWeightSemibold,
+      lineHeight: tokens.lineHeightMedium,
+    }),
+  ],
+
+  [
+    { size: 'small' },
+    tokens => ({
+      fontSize: tokens.fontSizes.small,
+      lineHeight: tokens.lineHeightSmall,
+    }),
+  ],
+]);
+
 export const buttonClassName = 'ui-button';
 
 /**
@@ -157,7 +325,26 @@ export const Button = compose<'button', ButtonProps, ButtonStylesProps, {}, {}>(
       },
       rtl: context.rtl,
     });
-    const { classes, styles: resolvedStyles } = useStyles<ButtonStylesProps>(composeOptions.displayName, {
+
+    const rootClassName = useButtonStyles(
+      {
+        text,
+        primary,
+        disabled,
+        circular,
+        size,
+        loading,
+        inverted,
+        iconOnly,
+        iconPosition,
+        fluid,
+      },
+      buttonClassName,
+      className,
+    );
+    const contentClassName = useButtonContentStyles({ size });
+
+    const { styles: resolvedStyles } = useStyles<ButtonStylesProps>(composeOptions.displayName, {
       className: composeOptions.className,
       mapPropsToStyles: () => ({
         text,
@@ -208,11 +395,9 @@ export const Button = compose<'button', ButtonProps, ButtonStylesProps, {}, {}>(
       });
     };
 
-    const renderContent = () => {
-      return createShorthand(composeOptions.slots.content, content, {
-        defaultProps: () => getA11yProps('content', slotProps.content),
-      });
-    };
+    const contentElement = createShorthand('span', content, {
+      defaultProps: () => getA11yProps('content', { className: contentClassName }),
+    });
 
     const handleClick = (e: React.SyntheticEvent) => {
       if (disabled) {
@@ -232,7 +417,7 @@ export const Button = compose<'button', ButtonProps, ButtonStylesProps, {}, {}>(
         {...rtlTextContainer.getAttributes({ forElements: [children] })}
         {...getA11yProps('root', {
           onClick: handleClick,
-          className: classes.root,
+          className: rootClassName,
           onFocus: handleFocus,
           ref,
           ...unhandledProps,
@@ -244,7 +429,7 @@ export const Button = compose<'button', ButtonProps, ButtonStylesProps, {}, {}>(
           <>
             {loading && renderLoader()}
             {iconPosition !== 'after' && renderIcon()}
-            {renderContent()}
+            {contentElement}
             {iconPosition === 'after' && renderIcon()}
           </>
         )}
