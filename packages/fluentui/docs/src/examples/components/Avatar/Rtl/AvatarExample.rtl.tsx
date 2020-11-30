@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Avatar } from '@fluentui/react-northstar';
+import { Avatar, makeStyles } from '@fluentui/react-northstar';
 import { AcceptIcon } from '@fluentui/react-icons-northstar';
+
+const useStatusOverrides = makeStyles([[null, { backgroundColor: 'green' }]]);
 
 const AvatarExampleRtl = () => (
   <Avatar
     name="جون دو"
     status={{
-      color: 'green',
+      className: useStatusOverrides(),
       icon: <AcceptIcon />,
     }}
   />
