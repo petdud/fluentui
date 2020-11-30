@@ -176,12 +176,7 @@ const useButtonStyles = makeStyles([
       },
     }),
   ],
-  [
-    { text: false, size: 'small' },
-    {
-      boxShadow: 'none',
-    },
-  ],
+  [{ text: false, size: 'small' }, { boxShadow: 'none' }],
 
   [
     { primary: true, text: false },

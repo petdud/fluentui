@@ -263,3 +263,5 @@ export const FocusZoneUtilities = {
   getPreviousElement,
   focusAsync,
 };
+
+export { makeStyles } from '@fluentui/react-theme-provider';

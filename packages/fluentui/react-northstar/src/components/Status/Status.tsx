@@ -39,29 +39,30 @@ export const statusClassName = 'ui-status';
 const useStatusStyles = makeStyles([
   [
     null,
-    {
+    tokens => ({
       alignItems: 'center',
       display: 'inline-flex',
       justifyContent: 'center',
       verticalAlign: 'middle',
 
       borderRadius: '9999px',
-    },
+
+      backgroundColor: tokens.colorScheme.default.background5,
+    }),
   ],
-  [null, tokens => ({ backgroundColor: tokens.colorScheme.default.background5 })],
 
   [{ state: 'success' }, tokens => ({ backgroundColor: tokens.colorScheme.green.background })],
   [{ state: 'info' }, tokens => ({ backgroundColor: tokens.colorScheme.brand.background })],
   [{ state: 'warning' }, tokens => ({ backgroundColor: tokens.colorScheme.yellow.background })],
   [{ state: 'error' }, tokens => ({ backgroundColor: tokens.colorScheme.red.background })],
 
-  [{ size: 'smallest' }, { width: pxToRem(8), height: pxToRem(8) }],
-  [{ size: 'smaller' }, { width: pxToRem(8), height: pxToRem(8) }],
-  [{ size: 'small' }, { width: pxToRem(8), height: pxToRem(8) }],
+  [{ size: 'smallest' }, { width: pxToRem(6), height: pxToRem(6) }],
+  [{ size: 'smaller' }, { width: pxToRem(10), height: pxToRem(10) }],
+  [{ size: 'small' }, { width: pxToRem(10), height: pxToRem(10) }],
   [{ size: 'medium' }, { width: pxToRem(10), height: pxToRem(10) }],
-  [{ size: 'large' }, { width: pxToRem(12), height: pxToRem(12) }],
-  [{ size: 'larger' }, { width: pxToRem(14), height: pxToRem(14) }],
-  [{ size: 'largest' }, { width: pxToRem(16), height: pxToRem(16) }],
+  [{ size: 'large' }, { width: pxToRem(10), height: pxToRem(10) }],
+  [{ size: 'larger' }, { width: pxToRem(16), height: pxToRem(16) }],
+  [{ size: 'largest' }, { width: 0, height: 0 }],
 ]);
 
 const useStatusIconStyles = makeStyles([
