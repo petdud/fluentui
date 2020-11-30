@@ -5,7 +5,7 @@ import * as CSS from 'csstype';
 // @ts-ignore
 import { expand } from 'inline-style-expand-shorthand';
 // @ts-ignore
-import _Stylis from 'stylis';
+import * as _Stylis from 'stylis';
 import { convertProperty } from 'rtl-css-js/core';
 
 import { cssifyDeclaration } from './cssifyDeclaration';
