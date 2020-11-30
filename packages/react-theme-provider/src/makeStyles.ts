@@ -206,7 +206,7 @@ export function makeNonReactStyles(styles: any) {
     }, {});
     const resultDefinitions = { ...matchedDefinitions, ...overrides };
 
-    return insertStyles(resultDefinitions, DEFINITION_CACHE, options.rtl, options.target);
+    return nonMakeClasses.join(' ') + insertStyles(resultDefinitions, DEFINITION_CACHE, options.rtl, options.target);
   };
 }
 
@@ -216,7 +216,7 @@ export function makeNonReactStyles(styles: any) {
 export function makeStyles(styles: any) {
   const result = makeNonReactStyles(styles);
 
-  return function ___(selectors: any, ...classNames: string[]): string {
+  return function ___(selectors: any = {}, ...classNames: string[]): string {
     const { rtl, theme, target } = useFluentContext();
 
     return result(selectors, { rtl, tokens: theme.siteVariables, target }, ...classNames);
