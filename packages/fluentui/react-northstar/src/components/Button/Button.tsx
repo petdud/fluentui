@@ -103,6 +103,59 @@ export type ButtonStylesProps = Pick<
   hasContent?: boolean;
 };
 
+type GetBorderFocusStylesOptions = {
+  padding: string;
+  radius: string;
+  width: string;
+
+  innerColor: string;
+  outerColor: string;
+
+  zIndex: string;
+};
+
+function getBorderFocusStyles(options: GetBorderFocusStylesOptions) {
+  return {
+    borderColor: 'transparent',
+
+    ':before': {
+      content: '""',
+      position: 'absolute',
+      borderStyle: 'solid',
+      pointerEvents: 'none',
+
+      borderColor: options.innerColor,
+      borderRadius: options.radius,
+      borderWidth: options.width,
+
+      zIndex: options.zIndex,
+
+      top: `calc(0px - ${options.padding})`,
+      bottom: `calc(0px - ${options.padding})`,
+      left: `calc(0px - ${options.padding})`,
+      right: `calc(0px - ${options.padding})`,
+    },
+
+    ':after': {
+      content: '""',
+      position: 'absolute',
+      borderStyle: 'solid',
+      pointerEvents: 'none',
+
+      borderColor: options.outerColor,
+      borderRadius: options.radius,
+      borderWidth: options.width,
+
+      zIndex: options.zIndex,
+
+      top: `calc(0px - ${options.padding} - ${options.width})`,
+      bottom: `calc(0px - ${options.padding} - ${options.width})`,
+      left: `calc(0px - ${options.padding} - ${options.width})`,
+      right: `calc(0px - ${options.padding} - ${options.width})`,
+    },
+  };
+}
+
 const useButtonStyles = makeStyles([
   [
     null,
@@ -124,9 +177,12 @@ const useButtonStyles = makeStyles([
       backgroundColor: tokens.colorScheme.default.background,
       borderRadius: tokens.borderRadius,
       color: tokens.colorScheme.default.foreground,
+
+      '--button-border-radius': tokens.borderWidth,
     }),
   ],
 
+  [{ circular: true }, { '--button-border-radius': pxToRem(4) }],
   [{ loading: true }, { minWidth: pxToRem(118) }],
 
   [
@@ -161,9 +217,18 @@ const useButtonStyles = makeStyles([
         transition: ultraFast,
       },
 
-      // ':focus': borderFocusStyles[':focus'],
+      ':focus': { outline: 'none' },
       ':focus-visible': {
-        // ...borderFocusStyles[':focus-visible'],
+        ...getBorderFocusStyles({
+          innerColor: tokens.focusInnerBorderColor,
+          outerColor: tokens.focusOuterBorderColor,
+
+          padding: 'var(--button-border-radius)',
+          radius: tokens.borderRadius,
+          width: tokens.borderWidth,
+
+          zIndex: tokens.zIndexes.foreground,
+        }),
 
         // backgroundColor: v.backgroundColorFocus,
         // borderColor: v.borderColorFocus,
@@ -192,9 +257,19 @@ const useButtonStyles = makeStyles([
         transition: ultraFast,
       },
 
-      // ':focus': borderFocusStyles[':focus'],
+      ':focus': { outline: 'none' },
       ':focus-visible': {
-        // ...borderFocusStyles[':focus-visible'],
+        ...getBorderFocusStyles({
+          innerColor: tokens.focusInnerBorderColor,
+          outerColor: tokens.focusOuterBorderColor,
+
+          padding: 'var(--button-border-radius)',
+          radius: tokens.borderRadius,
+          width: tokens.borderWidth,
+
+          zIndex: tokens.zIndexes.foreground,
+        }),
+
         // backgroundColor: v.primaryBackgroundColorFocus,
       },
 
@@ -261,6 +336,33 @@ const useButtonContentStyles = makeStyles([
       lineHeight: tokens.lineHeightSmall,
     }),
   ],
+]);
+const useButtonIconStyles = makeStyles([
+  // [
+  //   null,
+  //   ({ props: p, variables: v }) => ({
+  //     alignItems: 'center',
+  //     display: 'inline-flex',
+  //     justifyContent: 'center',
+  //
+  //     width: v.iconSize,
+  //     height: v.iconSize,
+  //
+  //     // when loading, hide the icon
+  //     ...(p.loading && {
+  //       margin: 0,
+  //       opacity: 0,
+  //       width: 0,
+  //     }),
+  //
+  //     ...(p.hasContent && {
+  //       margin: `0 ${pxToRem(10)} 0 0`,
+  //       ...(p.iconPosition === 'after' && {
+  //         margin: `0 0 0 ${pxToRem(10)}`,
+  //       }),
+  //     }),
+  //   }),
+  // ],
 ]);
 
 export const buttonClassName = 'ui-button';
